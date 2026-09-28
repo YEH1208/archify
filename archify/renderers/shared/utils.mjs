@@ -5,6 +5,7 @@ import {
   translateMessage,
   viewerCatalog,
 } from './i18n.mjs';
+import { zhTwFontStyle } from './zh-tw-fonts.mjs';
 
 export { esc };
 
@@ -179,7 +180,13 @@ export function applyTemplate(template, {
     .replace(GUIDED_VIEWS_PLACEHOLDER, () => `<script id="archify-guided-views-data" type="application/json">${guidedViewsJson}</script>`)
     .replace(SOURCE_EVIDENCE_PLACEHOLDER, () => sourceEvidence
       ? `    <script id="archify-source-evidence-data" type="application/json">${sourceEvidenceJson}</script>`
-      : '');
+      : '')
+    .replace('</head>', () => `${zhTwFontStyle({
+      locale: resolvedLocale,
+      title,
+      cards,
+      badge: translateMessage(resolvedLocale, 'viewer.preset.badge.editorial'),
+    })}</head>`);
 }
 
 // CJK and other wide/fullwidth glyphs render at roughly twice the advance

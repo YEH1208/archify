@@ -67,3 +67,18 @@ Brand names, logos, and trademarks remain the property of their respective
 owners. This notice records provenance and known terms; it does not grant rights
 that Archify does not hold, and it does not state that every packaged mark has
 been cleared for every commercial, promotional, or redistributive use.
+
+## LXGW WenKai TC
+
+`archify/assets/fonts/LXGWWenKaiTC-Medium.ttf` is
+[LXGW WenKai TC](https://github.com/lxgw/LxgwWenkaiTC) v1.522, Copyright
+2022-2026 The LXGW WenKai Project Authors, licensed under the SIL Open Font
+License 1.1 (`archify/assets/fonts/LXGWWenKaiTC-OFL.txt`). It is derived from
+Klee One by FONTWORKS; Klee is a trademark of FONTWORKS.
+
+For `zh-TW` output, Archify embeds only the glyphs used by the Editorial
+preset headings. That subset is a Modified Version under the OFL: it is named
+`Archify Kai Subset`, following the font author's request that derivative fonts
+avoid the names 霞鶩 and LXGW, and each generated HTML file carries the
+original copyright notice and the full OFL text. Archify is not endorsed by the
+font authors.
