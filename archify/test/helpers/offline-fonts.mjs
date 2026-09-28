@@ -15,10 +15,28 @@ const EXPECTED_FACES = [
   ['2c32b9b3ee358c119e210f6f5195f9bd34894d78a785ff2e95d60e718e400af4', 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'],
 ].sort(([a], [b]) => a.localeCompare(b));
 
+// zh-TW pages may also embed one per-diagram subset of the bundled LXGW WenKai TC
+// (OFL) for Editorial headings; it must carry that font's license text.
+const KAI_FAMILY = 'Archify Kai Subset';
+const KAI_LICENSE = fs.readFileSync(new URL('../../assets/fonts/LXGWWenKaiTC-OFL.txt', import.meta.url), 'utf8').trim();
+
+function assertKaiFace(block, css, subject) {
+  assert.ok(css.includes(KAI_LICENSE), `${subject}: missing LXGW WenKai TC license for ${KAI_FAMILY}`);
+  assert.doesNotMatch(block, /\blocal\s*\(/i, `${subject}: installed fonts must not override embedded bytes`);
+  const encoded = block.match(/\bsrc\s*:\s*url\(\s*["']?data:font\/ttf;base64,([A-Za-z0-9+/=]+)["']?\s*\)/i)?.[1];
+  assert.ok(encoded, `${subject}: missing embedded TrueType source for ${KAI_FAMILY}`);
+  assert.equal(Buffer.from(encoded, 'base64').readUInt32BE(0), 0x00010000, subject);
+}
+
 export function assertFontCss(css, subject) {
   assert.ok(css.includes(FONT_LICENSE), `${subject}: missing standalone font license`);
   const clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
-  const faces = [...clean.matchAll(/@font-face\s*\{([^}]+)\}/gi)].map(([, block]) => {
+  const blocks = [...clean.matchAll(/@font-face\s*\{([^}]+)\}/gi)].map(([, block]) => block);
+  const family = (block) => block.match(/\bfont-family\s*:\s*([^;]+)/i)?.[1].trim().replace(/["']/g, '');
+  const kai = blocks.filter((block) => family(block) === KAI_FAMILY);
+  assert.ok(kai.length <= 1, `${subject}: more than one ${KAI_FAMILY} face`);
+  kai.forEach((block) => assertKaiFace(block, css, subject));
+  const faces = blocks.filter((block) => family(block) !== KAI_FAMILY).map((block) => {
     const descriptor = (name) => block.match(new RegExp(`\\b${name}\\s*:\\s*([^;]+)`, 'i'))?.[1].trim();
     assert.equal(descriptor('font-family')?.replace(/["']/g, ''), 'JetBrains Mono', subject);
     assert.equal(descriptor('font-style'), 'normal', subject);
