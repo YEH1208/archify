@@ -134,7 +134,7 @@ async function loadArtifact(browser, artifactPath) {
 }
 
 test('zh-CN localizes renderer-owned output across all five modes without translating authored content', () => {
-  assert.deepEqual(SUPPORTED_LOCALES, ['en', 'zh-CN']);
+  assert.deepEqual(SUPPORTED_LOCALES, ['en', 'zh-CN', 'zh-TW']);
   for (const type of Object.keys(EXAMPLES)) {
     const document = example(type);
     const authoredTitle = document.meta.title;
@@ -384,6 +384,10 @@ test('runtime labels stay localized after composition', () => {
   assert.equal(translateMessage('zh-CN', 'viewer.kind.decision'), '决策');
   assert.equal(translateMessage('zh-CN', 'viewer.passport.relationship.connectsFrom'), '连接自');
   assert.equal(translateMessage('zh-CN', 'viewer.nav.level.auto'), '自动');
+  assert.equal(translateMessage('zh-TW', 'viewer.kind.backend'), '後端');
+  assert.equal(translateMessage('zh-TW', 'viewer.passport.relationship.connectsFrom'), '來自');
+  assert.equal(translateMessage('zh-TW', 'viewer.nav.radar.short'), '縮圖');
+  assert.equal(translateMessage('zh-TW', 'viewer.preset.editorial'), '筆記');
 
   const zhHops = translateCount('zh-CN', 'viewer.route.hop', 2);
   assert.equal(
