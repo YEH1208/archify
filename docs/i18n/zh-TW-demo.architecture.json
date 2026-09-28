@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "數位桌曆 2.0：整體架構",
+    "locale": "zh-TW",
+    "visual_preset": "editorial",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "daily-use",
+        "label": "翻桌曆、寫記事",
+        "focus": [
+          "user",
+          "gestures",
+          "main",
+          "desk3d",
+          "lunar",
+          "store"
+        ],
+        "note": "用滑鼠或手勢翻頁，日期頁帶出農曆，記事存在瀏覽器裡。"
+      },
+      {
+        "id": "keep-data",
+        "label": "資料留在本機",
+        "focus": [
+          "main",
+          "store",
+          "vault",
+          "reminders",
+          "sw"
+        ],
+        "note": "記事、照片、提醒都在本機，可另存到自己指定的資料夾。"
+      },
+      {
+        "id": "calendar-sync",
+        "label": "行事曆唯讀同步",
+        "focus": [
+          "main",
+          "calsync",
+          "google",
+          "outlook"
+        ],
+        "note": "瀏覽器直接讀取官方 API 的行程快照，不修改外部行程。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "使用者",
+      "sublabel": "瀏覽器・安裝版",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "sw",
+      "type": "cloud",
+      "label": "離線快取",
+      "sublabel": "Service Worker",
+      "pos": [
+        40,
+        470
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gestures",
+      "type": "frontend",
+      "label": "手勢控制",
+      "sublabel": "WebCam",
+      "pos": [
+        260,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "main",
+      "type": "frontend",
+      "label": "主程式",
+      "sublabel": "介面與流程",
+      "pos": [
+        260,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "main.js"
+    },
+    {
+      "id": "reminders",
+      "type": "backend",
+      "label": "提醒",
+      "sublabel": "通知・圖示徽章",
+      "pos": [
+        260,
+        470
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "desk3d",
+      "type": "frontend",
+      "label": "3D 桌曆",
+      "sublabel": "Three.js",
+      "pos": [
+        480,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "lunar",
+      "type": "backend",
+      "label": "農曆引擎",
+      "sublabel": "節氣・干支",
+      "pos": [
+        700,
+        130
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "資料層",
+      "sublabel": "記事・照片",
+      "pos": [
+        480,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "tag": "IndexedDB"
+    },
+    {
+      "id": "vault",
+      "type": "database",
+      "label": "資料夾存檔",
+      "sublabel": "使用者指定",
+      "pos": [
+        700,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "calsync",
+      "type": "backend",
+      "label": "行事曆同步",
+      "sublabel": "唯讀快照",
+      "pos": [
+        480,
+        470
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "google",
+      "type": "external",
+      "label": "Google 日曆",
+      "sublabel": "私人帳號",
+      "pos": [
+        940,
+        400
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "outlook",
+      "type": "external",
+      "label": "Outlook 日曆",
+      "sublabel": "公司帳號",
+      "pos": [
+        940,
+        560
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "瀏覽器（資料留在本機）",
+      "wraps": [
+        "sw",
+        "gestures",
+        "main",
+        "reminders",
+        "desk3d",
+        "lunar",
+        "store",
+        "vault",
+        "calsync"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user-main",
+      "from": "user",
+      "to": "main",
+      "label": "點選・拖曳",
+      "variant": "emphasis"
+    },
+    {
+      "id": "user-gestures",
+      "from": "user",
+      "to": "gestures",
+      "label": "手勢",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "gestures-main",
+      "from": "gestures",
+      "to": "main",
+      "label": "捏合選日期",
+      "labelAt": [
+        335,
+        247
+      ]
+    },
+    {
+      "id": "user-sw",
+      "from": "user",
+      "to": "sw",
+      "label": "離線開啟",
+      "variant": "dashed",
+      "labelAt": [
+        115,
+        417
+      ]
+    },
+    {
+      "id": "main-desk3d",
+      "from": "main",
+      "to": "desk3d",
+      "label": "繪製頁面",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "desk3d-lunar",
+      "from": "desk3d",
+      "to": "lunar",
+      "label": "農曆資料"
+    },
+    {
+      "id": "main-store",
+      "from": "main",
+      "to": "store",
+      "label": "讀寫記事",
+      "variant": "emphasis"
+    },
+    {
+      "id": "store-vault",
+      "from": "store",
+      "to": "vault",
+      "label": "備份",
+      "variant": "dashed"
+    },
+    {
+      "id": "main-reminders",
+      "from": "main",
+      "to": "reminders",
+      "label": "排程",
+      "labelAt": [
+        335,
+        417
+      ]
+    },
+    {
+      "id": "main-calsync",
+      "from": "main",
+      "to": "calsync",
+      "label": "連接"
+    },
+    {
+      "id": "calsync-google",
+      "from": "calsync",
+      "to": "google",
+      "label": "唯讀",
+      "variant": "security"
+    },
+    {
+      "id": "calsync-outlook",
+      "from": "calsync",
+      "to": "outlook",
+      "label": "唯讀",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "資料都在本機",
+      "items": [
+        "記事與提醒存在瀏覽器",
+        "照片放在 IndexedDB",
+        "可另存到自己指定的資料夾"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "行事曆唯讀同步",
+      "items": [
+        "瀏覽器直接讀取官方 API",
+        "只取日期、標題等顯示欄位",
+        "不修改或刪除外部行程"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "操作方式",
+      "items": [
+        "滑鼠拖曳翻頁",
+        "WebCam 手勢選日期",
+        "安裝版可離線開啟"
+      ]
+    }
+  ]
+}

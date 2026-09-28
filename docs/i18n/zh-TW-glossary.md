@@ -2,6 +2,12 @@
 
 這份文件說明 Archify 介面（`meta.locale: "zh-TW"`）的譯法依據，方便審查，也讓之後修改翻譯的人能沿用同一套標準。介面文字在 `archify/renderers/shared/i18n.mjs`，每句都有英文、簡體中文、臺灣正體中文三個版本。
 
+## 示範
+
+![zh-TW 介面搭配「筆記」樣式的架構圖示範](zh-TW-demo.png)
+
+以貢獻者自己的專案「數位桌曆 2.0」為例，`meta.locale: "zh-TW"` 並選用「筆記」樣式。規格檔：[zh-TW-demo.architecture.json](zh-TW-demo.architecture.json)；下載 [zh-TW-demo.html](zh-TW-demo.html) 後用瀏覽器開啟，可以操作導覽、搜尋、樣式切換等功能。
+
 ## 參考來源
 
 | 代號 | 來源 | 用途 |
